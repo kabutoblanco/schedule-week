@@ -1,1 +1,1 @@
-# schedule-week
+# schedule-week-js
