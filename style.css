@@ -1,5 +1,5 @@
 .red {
-    background: red;
+    background-color: red;
 }
 
 .schedule-container {
@@ -26,6 +26,10 @@
 .schedule {
     -webkit-user-drag: none;
     user-select: none;
+}
+
+.schedule:hover {
+    border: 1px double red;
 }
 
 .schedule-body {
