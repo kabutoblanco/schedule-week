@@ -29,7 +29,7 @@
 }
 
 .schedule:hover {
-    border: 1px double red;
+    border: 1px double rgba(38, 30, 112, 1);
 }
 
 .schedule-body {

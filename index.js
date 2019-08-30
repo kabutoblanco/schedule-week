@@ -47,6 +47,9 @@ function customTag(tagName, fn) {
 }
 
 function schedule(element) {
+    // schedules = element.attributes.schedules.value;
+    schedules = [{fromHour: "07:30", untilHour: "08:00", day: "Miercoles"}, {fromHour: "19:30", untilHour: "20:00", day: "Viernes"}];
+
     const nodeScheduleDiv = document.createElement("div");
     nodeScheduleDiv.className += "schedule-container";
 
@@ -115,6 +118,7 @@ function schedule(element) {
         nodeTableResponsive.appendChild(nodeTableDiv);
         nodeScheduleDiv.appendChild(nodeTableResponsive);
         element.appendChild(nodeScheduleDiv);
+        buildSchedule();
         // - - - - - - - - - -
     } else {
         throw new ExceptionInterval();
@@ -136,6 +140,24 @@ function parseDate(hours, minutes) {
         hours = "0" + hours;
     }
     return hours + ":" + minutes;
+}
+
+function buildSchedule() {    
+    for (const scheduleAux of schedules) {
+        var i = 0;
+        for (const hourAux of hoursArray) {
+            var j = 0;
+            if (hourAux === scheduleAux.fromHour) {
+                for (const dayAux of daysArray) {
+                    if (dayAux === scheduleAux.day) { 
+                        $(".schedule-body")[0].childNodes[i].childNodes[j + 1].className += " red";                        
+                    }
+                    j++;
+                }
+            }
+            i++;
+        }
+    }
 }
 
 customTag("schedule", schedule);
