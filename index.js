@@ -4,6 +4,9 @@ var schedules = [];
 var daysArray = [];
 var hoursArray = [];
 
+const vectorDaysEs = ["Hora", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+const vectorDaysEn = ["Hour", "Monday", "Tuesday", "Wednsday", "Thuesday", "Frieday", "Saturday", "Sunday"];
+
 $(document).ready(function () {
     $(".schedule-body").on("mousedown", function () { pressed = true; });
     $(".schedule-body").on("mouseup", function () { pressed = false; });
@@ -16,7 +19,7 @@ function select(event) {
     const schedule = $(event.target);
     if (pressed || event.type === "mousedown") {
         const i = event.target.parentElement.sectionRowIndex;
-        const j = event.currentTarget.cellIndex - 1;
+        const j = event.currentTarget.cellIndex;
         const untilDateNeto = parseInt(hoursArray[i].split(":")[0]) + (parseInt(hoursArray[i].split(":")[1]) + interval) / 60;
         var minutes = (untilDateNeto - Math.trunc(untilDateNeto)) * 60;
         var hours = Math.trunc(untilDateNeto);
@@ -47,8 +50,10 @@ function customTag(tagName, fn) {
 }
 
 function schedule(element) {
+    const language = document.getElementsByTagName("html")[0].attributes.lang.value;
+
     // schedules = element.attributes.schedules.value;
-    schedules = [{fromHour: "07:30", untilHour: "08:00", day: "Miercoles"}, {fromHour: "19:30", untilHour: "20:00", day: "Viernes"}];
+    schedules = [{ fromHour: "07:30", untilHour: "08:00", day: "Miercoles" }, { fromHour: "19:30", untilHour: "20:00", day: "Viernes" }];
 
     const nodeScheduleDiv = document.createElement("div");
     nodeScheduleDiv.className += "schedule-container";
@@ -74,8 +79,21 @@ function schedule(element) {
     const fromDateNeto = parseInt(fromDate.split(":")[0]) + parseInt(fromDate.split(":")[1]) / 60;
     const untilDateNeto = parseInt(untilDate.split(":")[0]) + parseInt(untilDate.split(":")[1]) / 60;
     const deltaDate = untilDateNeto - fromDateNeto;
-    const vectorDays = ["Hora", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-    daysArray = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+
+    var vectorDays = [];
+    switch (language) {
+        case "es":
+            vectorDays = vectorDaysEs;
+            break;
+        case "en":
+            vectorDays = vectorDaysEn;
+            break;
+
+        default:
+            break;
+    }
+    
+    daysArray = vectorDays.copyWithin(1, 1, 7);
     if (deltaDate % intervalNeto == 0) {
         const deltaRow = deltaDate / (interval / 60);
         //Struct General
@@ -142,15 +160,15 @@ function parseDate(hours, minutes) {
     return hours + ":" + minutes;
 }
 
-function buildSchedule() {    
+function buildSchedule() {
     for (const scheduleAux of schedules) {
         var i = 0;
         for (const hourAux of hoursArray) {
             var j = 0;
             if (hourAux === scheduleAux.fromHour) {
                 for (const dayAux of daysArray) {
-                    if (dayAux === scheduleAux.day) { 
-                        $(".schedule-body")[0].childNodes[i].childNodes[j + 1].className += " red";                        
+                    if (dayAux === scheduleAux.day) {
+                        $(".schedule-body")[0].childNodes[i].childNodes[j].className += " red";
                     }
                     j++;
                 }
